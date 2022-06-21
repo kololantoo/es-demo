@@ -1,7 +1,9 @@
 package com.kololantoo.esdemo.controller;
 
+import com.kololantoo.esdemo.service.InitService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,8 +15,17 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("es")
-@Api("es操作")
+@Api(tags = "es操作")
 public class EsDemoController {
+
+    @Autowired
+    private InitService initService;
+
+    @PostMapping("init")
+    @ApiOperation("初始化数据")
+    public void init() {
+        initService.init();
+    }
 
     @PostMapping("add")
     @ApiOperation("新增数据")

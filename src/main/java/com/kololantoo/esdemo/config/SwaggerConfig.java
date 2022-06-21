@@ -22,16 +22,14 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @Configuration
 @EnableSwagger2
 public class SwaggerConfig {
-    @Value(value = "${swagger.enabled:false}")
-    Boolean swaggerEnabled;
 
     @Bean
     Docket docket() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(createApiInfo())
-                .enable(swaggerEnabled)
+                .enable(true)
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.kololantoo.esdemo.controller"))
+                .apis(RequestHandlerSelectors.basePackage("com.kololantoo.esdemo"))
                 .paths(PathSelectors.any())
                 .build();
     }
