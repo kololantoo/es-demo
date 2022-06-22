@@ -10,13 +10,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * @author zhengyang
- * @date 2022/6/20
+ * @date 2022/6/22
  * @description
  */
 @RestController
-@RequestMapping("es")
-@Api(tags = "es操作")
-public class EsDemoController {
+@RequestMapping("data")
+@Api(tags = "数据初始化操作")
+public class InitController {
 
     @Autowired
     private InitService initService;
@@ -27,27 +27,9 @@ public class EsDemoController {
         initService.init();
     }
 
-    @PostMapping("add")
-    @ApiOperation("新增数据")
-    public void add() {
-
-    }
-
-    @PostMapping("delete")
-    @ApiOperation("删除数据")
-    public void delete() {
-
-    }
-
-    @PostMapping("update")
-    @ApiOperation("修改数据")
-    public void update() {
-
-    }
-
-    @PostMapping("search")
-    @ApiOperation("查询数据")
-    public void search() {
-
+    @PostMapping("truncate")
+    @ApiOperation("清空数据")
+    public void truncate() {
+        initService.truncate();
     }
 }
