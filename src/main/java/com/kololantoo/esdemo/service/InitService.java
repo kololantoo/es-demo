@@ -8,6 +8,7 @@ import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -24,6 +25,8 @@ public class InitService {
     @Autowired
     private final ElasticsearchRestTemplate template;
 
+    public static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
     /**
      * 初始化基础数据
      */
@@ -39,7 +42,8 @@ public class InitService {
         demo.setBoolVal(false);
         demo.setDoubleVal(3.14);
         List<String> list = new ArrayList<>();
-        list.add("hello");
+        list.add("hello1");
+        list.add("world1");
         demo.setList(list);
         template.save(demo);
 
@@ -54,7 +58,8 @@ public class InitService {
         demo2.setBoolVal(true);
         demo2.setDoubleVal(4.33);
         List<String> list2 = new ArrayList<>();
-        list2.add("world");
+        list2.add("hello2");
+        list2.add("world2");
         demo2.setList(list2);
         template.save(demo2);
 
@@ -69,9 +74,26 @@ public class InitService {
         demo3.setBoolVal(true);
         demo3.setDoubleVal(10.1);
         List<String> list3 = new ArrayList<>();
-        list3.add("here");
+        list3.add("hello3");
+        list3.add("world3");
         demo3.setList(list3);
         template.save(demo3);
+
+        MyEsDemo demo4 = new MyEsDemo();
+        demo4.setId(4L);
+        demo4.setNormalText1("10086");
+        demo4.setNormalText2("这是一个没用的测试数据");
+        demo4.setCombineText("10086"+"_"+"这是一个没用的测试数据");
+        demo4.setNormalKeyword("10086");
+        demo4.setAnalyzeText("这是一个没用的测试数据");
+        demo4.setDate(new Date(2023));
+        demo4.setBoolVal(true);
+        demo4.setDoubleVal(-2d);
+        List<String> list4 = new ArrayList<>();
+        list4.add("hello1");
+        list4.add("world2");
+        demo4.setList(list4);
+        template.save(demo4);
     }
 
     /**

@@ -13,7 +13,7 @@ import java.util.List;
  * @description
  */
 @Document(indexName = "demo")
-@Setting(replicas = 2)
+@Setting(replicas = 2,shards = 2)
 @Data
 public class MyEsDemo {
 

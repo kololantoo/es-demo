@@ -7,9 +7,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
 import org.springframework.data.elasticsearch.core.RefreshPolicy;
+import org.springframework.data.elasticsearch.core.SearchHit;
+import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.data.elasticsearch.core.mapping.IndexCoordinates;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author zhengyang
@@ -44,5 +49,15 @@ public class EsUtil {
         // 使用QueryBuilders创建查询条件
         MatchQueryBuilder matchQuery = QueryBuilders.matchQuery("name", "张三");
         queryBuilder.withQuery(matchQuery);
+    }
+
+    public <T> List<T> getHitResult(NativeSearchQueryBuilder queryBuilder, Class<T> c) {
+        List<T> result = new ArrayList<>();
+        SearchHits<T> search = template.search(queryBuilder.build(),c);
+        if (search.getTotalHits()>0) {
+            List<T> hitResult = search.stream().map(SearchHit::getContent).toList();
+            result.addAll(hitResult);
+        }
+        return result;
     }
 }
