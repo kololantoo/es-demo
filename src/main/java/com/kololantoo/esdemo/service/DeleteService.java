@@ -1,24 +1,24 @@
 package com.kololantoo.esdemo.service;
 
-import com.alibaba.fastjson2.JSON;
 import com.kololantoo.esdemo.model.MyEsDemo;
 import com.kololantoo.esdemo.repository.MyEsDemoRepository;
-import com.kololantoo.esdemo.utils.SnowflakeIdUtil;
+import com.kololantoo.esdemo.utils.EsUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.elasticsearch.action.bulk.BulkRequest;
-import org.elasticsearch.action.index.IndexRequest;
-import org.elasticsearch.action.index.IndexResponse;
+import org.elasticsearch.action.bulk.BulkProcessor;
+import org.elasticsearch.action.delete.DeleteRequest;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
-import org.elasticsearch.xcontent.XContentType;
+import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.index.reindex.DeleteByQueryRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
 import org.springframework.data.elasticsearch.core.RefreshPolicy;
+import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -39,7 +39,7 @@ public class DeleteService {
     @Autowired
     private RestHighLevelClient client;
     @Autowired
-    private SnowflakeIdUtil snowflakeIdUtil;
+    private EsUtil esUtil;
 
     public void deleteByTemplate(MyEsDemo demo) {
         template.setRefreshPolicy(RefreshPolicy.IMMEDIATE);
@@ -49,12 +49,14 @@ public class DeleteService {
     public void deleteBatchByTemplate(List<MyEsDemo> list) {
         template.setRefreshPolicy(RefreshPolicy.IMMEDIATE);
         for (MyEsDemo demo : list) {
-            repository.deleteById(demo.getId());
-
+            template.delete(demo);
         }
     }
 
     public void queryDeleteByTemplate() {
+        NativeSearchQueryBuilder builder = new NativeSearchQueryBuilder();
+        builder.withQuery(QueryBuilders.matchQuery("id",1));
+        template.delete(builder.build(), MyEsDemo.class);
     }
 
     public void deleteByRepository(MyEsDemo demo) {
@@ -68,30 +70,29 @@ public class DeleteService {
 
     public void deleteByRestClient(MyEsDemo demo) {
         String indexName = demo.getClass().getAnnotation(Document.class).indexName();
-        IndexRequest indexRequest = new IndexRequest(indexName);
-
-        indexRequest.id(String.valueOf(snowflakeIdUtil.nextId()));
-        indexRequest.source(JSON.toJSONString(demo), XContentType.JSON);
-
+        DeleteRequest deleteRequest = new DeleteRequest(indexName, String.valueOf(demo.getId()));
         try {
-            IndexResponse indexResponse = client.index(indexRequest, RequestOptions.DEFAULT);
+            client.delete(deleteRequest, RequestOptions.DEFAULT);
         } catch (IOException e) {
-            log.error("保存失败");
+            e.printStackTrace();
         }
     }
 
     public void deleteBatchByRestClient(List<MyEsDemo> list) {
-        if (CollectionUtils.isEmpty(list)) {
-            return;
-        }
-        String indexName = list.get(0).getClass().getAnnotation(Document.class).indexName();
+        BulkProcessor bulkProcessor = esUtil.createBulkProcessor();
+        List<DeleteRequest> deleteRequestList=new ArrayList<>();
+        list.forEach(e->{
+            DeleteRequest deleteRequest = new DeleteRequest("demo", String.valueOf(e.getId()));
+            deleteRequestList.add(deleteRequest);
+        });
+        deleteRequestList.forEach(bulkProcessor::add);
+    }
 
-        BulkRequest request = new BulkRequest();
-        for (MyEsDemo demo : list) {
-        }
-
+    public void queryDeleteByRestClient() {
+        DeleteByQueryRequest request = new DeleteByQueryRequest("sub_bank1031");
+        request.setQuery(QueryBuilders.matchQuery("id",1));
         try {
-            client.bulk(request,RequestOptions.DEFAULT);
+            client.deleteByQuery(request, RequestOptions.DEFAULT);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

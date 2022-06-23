@@ -26,37 +26,37 @@ public class AddController {
     private AddService addService;
 
     @PostMapping("addByTemplate")
-    @ApiOperation(value = "使用Template新增")
+    @ApiOperation(value = "Template新增")
     public void addByTemplate(@RequestBody MyEsDemo demo) {
         addService.addByTemplate(demo);
     }
 
     @PostMapping("addBatchByTemplate")
-    @ApiOperation(value = "使用Template批量新增")
+    @ApiOperation(value = "Template批量新增")
     public void addBatchByTemplate(@RequestBody List<MyEsDemo> list) {
         addService.addBatchByTemplate(list);
     }
 
     @PostMapping("addByRepository")
-    @ApiOperation(value = "使用Repository新增")
+    @ApiOperation(value = "Repository新增")
     public void addByRepository(@RequestBody MyEsDemo demo) {
         addService.addByRepository(demo);
     }
 
     @PostMapping("addBatchByRepository")
-    @ApiOperation(value = "使用Repository批量新增")
+    @ApiOperation(value = "Repository批量新增")
     public void addBatchByRepository(@RequestBody List<MyEsDemo> list) {
         addService.addBatchByRepository(list);
     }
 
     @PostMapping("addByRestClient")
-    @ApiOperation(value = "使用RestClient新增")
+    @ApiOperation(value = "RestClient新增")
     public void addByRestClient(@RequestBody MyEsDemo demo) {
         addService.addByRestClient(demo);
     }
 
     @PostMapping("addBatchByRestClient")
-    @ApiOperation(value = "使用RestClient批量新增")
+    @ApiOperation(value = "RestClient批量新增")
     public void addBatchByRestClient(@RequestBody List<MyEsDemo> list) {
         addService.addBatchByRestClient(list);
     }
