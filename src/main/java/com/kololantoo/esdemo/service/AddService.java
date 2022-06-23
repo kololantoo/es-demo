@@ -5,6 +5,7 @@ import com.alibaba.fastjson2.JSONObject;
 import com.kololantoo.esdemo.model.MyEsDemo;
 import com.kololantoo.esdemo.repository.MyEsDemoRepository;
 import com.kololantoo.esdemo.utils.SnowflakeIdUtil;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.elasticsearch.action.bulk.BulkRequest;
 import org.elasticsearch.action.index.IndexRequest;
@@ -27,17 +28,18 @@ import java.util.List;
  * @description
  */
 @Service
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 @Slf4j
 public class AddService {
 
     @Autowired
-    private ElasticsearchRestTemplate template;
+    private final ElasticsearchRestTemplate template;
     @Autowired
-    private MyEsDemoRepository repository;
+    private final MyEsDemoRepository repository;
     @Autowired
-    private RestHighLevelClient client;
+    private final RestHighLevelClient client;
     @Autowired
-    private SnowflakeIdUtil snowflakeIdUtil;
+    private final SnowflakeIdUtil snowflakeIdUtil;
 
     /**
      * 使用ElasticsearchRestTemplate新增

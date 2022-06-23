@@ -2,9 +2,8 @@ package com.kololantoo.esdemo.service;
 
 import com.kololantoo.esdemo.model.MyEsDemo;
 import com.kololantoo.esdemo.repository.MyEsDemoRepository;
-import com.kololantoo.esdemo.utils.EsUtil;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.elasticsearch.action.bulk.BulkProcessor;
 import org.elasticsearch.action.bulk.BulkRequest;
 import org.elasticsearch.action.delete.DeleteRequest;
 import org.elasticsearch.client.RequestOptions;
@@ -19,7 +18,6 @@ import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilde
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -29,16 +27,17 @@ import java.util.stream.Collectors;
  * @description
  */
 @Service
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 @Slf4j
 public class DeleteService {
 
 
     @Autowired
-    private ElasticsearchRestTemplate template;
+    private final ElasticsearchRestTemplate template;
     @Autowired
-    private MyEsDemoRepository repository;
+    private final MyEsDemoRepository repository;
     @Autowired
-    private RestHighLevelClient client;
+    private final RestHighLevelClient client;
 
     /**
      * 使用Template删除

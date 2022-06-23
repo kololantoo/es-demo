@@ -2,6 +2,8 @@ package com.kololantoo.esdemo.service;
 
 import com.alibaba.fastjson2.JSON;
 import com.kololantoo.esdemo.model.MyEsDemo;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.elasticsearch.action.bulk.BulkRequest;
 import org.elasticsearch.action.update.UpdateRequest;
 import org.elasticsearch.client.RequestOptions;
@@ -30,12 +32,14 @@ import java.util.Set;
  * @description
  */
 @Service
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
+@Slf4j
 public class UpdateService {
 
     @Autowired
-    private ElasticsearchRestTemplate template;
+    private final ElasticsearchRestTemplate template;
     @Autowired
-    private RestHighLevelClient client;
+    private final RestHighLevelClient client;
 
     /**
      * 使用Template的save方法进行更新，该方法会覆盖会将id相等数据的所有字段均替换为新传入对象的字段值，null也会覆盖，若id不匹配，则新增
