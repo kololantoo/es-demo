@@ -1,19 +1,16 @@
 package com.kololantoo.esdemo.service;
-import com.google.common.collect.Lists;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 import com.kololantoo.esdemo.model.MyEsDemo;
-import com.kololantoo.esdemo.utils.EsUtil;
 import lombok.RequiredArgsConstructor;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
-import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * @author zhengyang
@@ -26,8 +23,6 @@ public class InitService {
 
     @Autowired
     private final ElasticsearchRestTemplate template;
-    @Autowired
-    EsUtil esUtil;
 
     /**
      * 初始化基础数据
@@ -46,7 +41,7 @@ public class InitService {
         List<String> list = new ArrayList<>();
         list.add("hello");
         demo.setList(list);
-        esUtil.add(demo);
+        template.save(demo);
 
         MyEsDemo demo2 = new MyEsDemo();
         demo2.setId(2L);
@@ -61,7 +56,7 @@ public class InitService {
         List<String> list2 = new ArrayList<>();
         list2.add("world");
         demo2.setList(list2);
-        esUtil.add(demo2);
+        template.save(demo2);
 
         MyEsDemo demo3 = new MyEsDemo();
         demo3.setId(3L);
@@ -76,7 +71,7 @@ public class InitService {
         List<String> list3 = new ArrayList<>();
         list3.add("here");
         demo3.setList(list3);
-        esUtil.add(demo3);
+        template.save(demo3);
     }
 
     /**

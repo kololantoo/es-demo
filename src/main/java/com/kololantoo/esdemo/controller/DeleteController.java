@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -56,19 +57,19 @@ public class DeleteController {
 
     @PostMapping("deleteByRestClient")
     @ApiOperation(value = "RestClient删除")
-    public void deleteByRestClient(MyEsDemo demo) {
+    public void deleteByRestClient(MyEsDemo demo) throws IOException {
         deleteService.deleteByRestClient(demo);
     }
 
     @PostMapping("deleteBatchByRestClient")
     @ApiOperation(value = "RestClient批量删除")
-    public void deleteBatchByRestClient(List<MyEsDemo> list) {
+    public void deleteBatchByRestClient(List<MyEsDemo> list) throws IOException {
         deleteService.deleteBatchByRestClient(list);
     }
 
     @PostMapping("queryDeleteByRestClient")
     @ApiOperation(value = "RestClient条件删除")
-    public void queryDeleteByRestClient() {
+    public void queryDeleteByRestClient() throws IOException {
         deleteService.queryDeleteByRestClient();
     }
 

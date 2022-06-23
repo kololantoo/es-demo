@@ -8,7 +8,6 @@ import com.kololantoo.esdemo.utils.SnowflakeIdUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.elasticsearch.action.bulk.BulkRequest;
 import org.elasticsearch.action.index.IndexRequest;
-import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.xcontent.XContentType;
@@ -40,24 +39,44 @@ public class AddService {
     @Autowired
     private SnowflakeIdUtil snowflakeIdUtil;
 
+    /**
+     * 使用ElasticsearchRestTemplate新增
+     * @param demo
+     */
     public void addByTemplate(MyEsDemo demo) {
         template.setRefreshPolicy(RefreshPolicy.IMMEDIATE);
         template.save(demo);
     }
 
+    /**
+     * 使用ElasticsearchRestTemplate批量新增
+     * @param list
+     */
     public void addBatchByTemplate(List<MyEsDemo> list) {
         template.setRefreshPolicy(RefreshPolicy.IMMEDIATE);
         template.save(list);
     }
 
+    /**
+     * 使用Repository新增
+     * @param demo
+     */
     public void addByRepository(MyEsDemo demo) {
         repository.save(demo);
     }
 
+    /**
+     * 使用Repository批量新增
+     * @param list
+     */
     public void addBatchByRepository(List<MyEsDemo> list) {
         repository.saveAll(list);
     }
 
+    /**
+     * 使用RestClient新增
+     * @param demo
+     */
     public void addByRestClient(MyEsDemo demo) {
         String indexName = demo.getClass().getAnnotation(Document.class).indexName();
         IndexRequest indexRequest = new IndexRequest(indexName);
@@ -66,12 +85,16 @@ public class AddService {
         indexRequest.source(JSON.toJSONString(demo), XContentType.JSON);
 
         try {
-            IndexResponse indexResponse = client.index(indexRequest, RequestOptions.DEFAULT);
+            client.index(indexRequest, RequestOptions.DEFAULT);
         } catch (IOException e) {
             log.error("保存失败");
         }
     }
 
+    /**
+     * 使用RestClient批量新增
+     * @param list
+     */
     public void addBatchByRestClient(List<MyEsDemo> list) {
         if (CollectionUtils.isEmpty(list)) {
             return;
