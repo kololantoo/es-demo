@@ -72,7 +72,6 @@ public class UpdateService {
     public void updateBatchByTemplate(List<MyEsDemo> list) {
         List<UpdateQuery> updateQueryList = new ArrayList<>();
         for (MyEsDemo demo : list) {
-            // todo 验证是否可以不传入id
             Document document = Document.create();
             document.fromJson(JSON.toJSONString(demo));
             UpdateQuery query = UpdateQuery
