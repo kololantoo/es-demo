@@ -28,6 +28,7 @@ import java.util.List;
  * @description
  */
 @Service
+// 使用lombok此注解之后，Autowired 的对象必须是final或者是@NotNull
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 @Slf4j
 public class AddService {
